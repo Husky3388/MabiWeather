@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1" -->
+        <title>MabiWeather</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    </head>
+    <body>
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">MabiWeather</h1>
+                <h2 class="card-subtitle text-muted">By Khoe</h2>
+                <br>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-3">
+                            <input id="date" type="text" class="form-control" placeholder="Date (Format: yyyy-MM-dd)">
+                        </div>
+                        <div class="col-3 form-floating">
+                            <select id="timezone" class="form-select">
+                                <option value="America/Los_Angeles">Pacific</option>
+                                <option value="America/Chicago">Central</option>
+                                <option value="America/New_York">Eastern</option>
+                            </select>
+                            <label for="timezone">Timezone</label>
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-primary" onclick="getData();">Get Weather</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <p style="font-size: 8px;">
+                    Tool used to determine best day and time to take Mystic on a picnic.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        
+        <div class="container-fluid">
+            <div class="row">
+                <table class="table table-primary table-striped table-bordered table-sm">
+                    <thead style="position: sticky; top: 0;">
+                        <tr>
+                            <th scope="col" style="position: sticky; left: 0;">Area</th>
+                            <th scope="col">00:00</th><th scope="col">00:20</th><th scope="col">00:40</th>
+                            <th scope="col">01:00</th><th scope="col">01:20</th><th scope="col">01:40</th>
+                            <th scope="col">02:00</th><th scope="col">02:20</th><th scope="col">02:40</th>
+                            <th scope="col">03:00</th><th scope="col">03:20</th><th scope="col">03:40</th>
+                            <th scope="col">04:00</th><th scope="col">04:20</th><th scope="col">04:40</th>
+                            <th scope="col">05:00</th><th scope="col">05:20</th><th scope="col">05:40</th>
+                            <th scope="col">06:00</th><th scope="col">06:20</th><th scope="col">06:40</th>
+                            <th scope="col">07:00</th><th scope="col">07:20</th><th scope="col">07:40</th>
+                            <th scope="col">08:00</th><th scope="col">08:20</th><th scope="col">08:40</th>
+                            <th scope="col">09:00</th><th scope="col">09:20</th><th scope="col">09:40</th>
+                            <th scope="col">10:00</th><th scope="col">10:20</th><th scope="col">10:40</th>
+                            <th scope="col">11:00</th><th scope="col">11:20</th><th scope="col">11:40</th>
+                            <th scope="col">12:00</th><th scope="col">12:20</th><th scope="col">12:40</th>
+                            <th scope="col">13:00</th><th scope="col">13:20</th><th scope="col">13:40</th>
+                            <th scope="col">14:00</th><th scope="col">14:20</th><th scope="col">14:40</th>
+                            <th scope="col">15:00</th><th scope="col">15:20</th><th scope="col">15:40</th>
+                            <th scope="col">16:00</th><th scope="col">16:20</th><th scope="col">16:40</th>
+                            <th scope="col">17:00</th><th scope="col">17:20</th><th scope="col">17:40</th>
+                            <th scope="col">18:00</th><th scope="col">18:20</th><th scope="col">18:40</th>
+                            <th scope="col">19:00</th><th scope="col">19:20</th><th scope="col">19:40</th>
+                            <th scope="col">20:00</th><th scope="col">20:20</th><th scope="col">20:40</th>
+                            <th scope="col">21:00</th><th scope="col">21:20</th><th scope="col">21:40</th>
+                            <th scope="col">22:00</th><th scope="col">22:20</th><th scope="col">22:40</th>
+                            <th scope="col">23:00</th><th scope="col">23:20</th><th scope="col">23:40</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableContents" class="table-group-divider align-middle"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        <script>
+            class Forecast {
+                constructor(area, weather) {
+                    this.area = area;
+                    this.weather = weather;
+                }
+            }
+
+            const area = {
+                type1: 'Tir Chonaill, Dugald Aisle, Dugald Residential + Castle',
+                type2: 'Dunbarton, Gairech, Port Cobh, Fiodh',
+                type3: 'Bangor',
+                type4: 'Emain Macha',
+                type5: 'Sen Mag, Sen Mag Residential + Castle',
+                type6: 'Port Cean, Morva Aisle',
+                type7: 'Rano, Nubes',
+                type8: 'Connous',
+                type9: 'Courcle, Irai Falls',
+                type10: 'Physis, Zardine',
+                type11: 'Shadow Realm',
+                type12: 'Taillteann, Tara, Corrib Valley, Blago Prairie, Sliab Cuilin, Abb Neagh',
+                type13: 'Unused'
+            }
+
+            const weatherIcon = {
+                '-9': '<i class="bi bi-question"></i>',
+                '-8': '<i class="bi bi-sun"></i>',
+                '-7': '<i class="bi bi-cloudy"></i>',
+                '-6': '<i class="bi bi-cloudy"></i>',
+                '-5': '<i class="bi bi-cloudy"></i>',
+                '-4': '<i class="bi bi-cloudy"></i>',
+                '-3': '<i class="bi bi-cloudy"></i>',
+                '-2': '<i class="bi bi-cloudy"></i>',
+                '-1': '<i class="bi bi-cloudy"></i>',
+                '0': '<i class="bi bi-cloud-rain"></i>',
+                '1': '<i class="bi bi-cloud-rain"></i>',
+                '2': '<i class="bi bi-cloud-rain"></i>',
+                '3': '<i class="bi bi-cloud-rain"></i>',
+                '4': '<i class="bi bi-cloud-rain"></i>',
+                '5': '<i class="bi bi-cloud-rain"></i>',
+                '6': '<i class="bi bi-cloud-rain"></i>',
+                '7': '<i class="bi bi-cloud-rain"></i>',
+                '8': '<i class="bi bi-cloud-rain"></i>',
+                '9': '<i class="bi bi-cloud-rain"></i>',
+                '10': '<i class="bi bi-cloud-rain"></i>',
+                '11': '<i class="bi bi-cloud-rain"></i>',
+                '12': '<i class="bi bi-cloud-rain"></i>',
+                '13': '<i class="bi bi-cloud-rain"></i>',
+                '14': '<i class="bi bi-cloud-rain"></i>',
+                '15': '<i class="bi bi-cloud-rain"></i>',
+                '16': '<i class="bi bi-cloud-rain"></i>',
+                '17': '<i class="bi bi-cloud-rain"></i>',
+                '18': '<i class="bi bi-cloud-rain"></i>',
+                '19': '<i class="bi bi-cloud-rain"></i>',
+                '20': '<i class="bi bi-cloud-lightning-rain"></i>',
+            }
+
+            async function getData() {
+                let data;
+                let arrayOfForecasts = new Array();
+                let formattedTodaysDate = document.getElementById('date').value;
+                let selectedTimezone = document.getElementById('timezone');
+                let timezone = selectedTimezone.options[selectedTimezone.selectedIndex].value;
+                for (let i = 1; i < 14; i++) {
+                    let type = 'type' + i;
+                    const fetchData = await fetch(
+                        'https://mabi.world/api/forecast/?from=' + formattedTodaysDate
+                        + '&of=' + type
+                        + '&duration=72'
+                        + '&tz=' + timezone);
+                    data = await fetchData.json();
+                    var key = Object.keys(data.forecast)[0];
+                    var value = data.forecast[type];
+                    arrayOfForecasts.push(new Forecast(area[key], value));
+                }
+                var table = document.getElementById("tableContents");
+                var tableContents = '';
+                arrayOfForecasts.forEach(function(forecast) {
+                    tableContents += '<tr><th scope="row" style="word-wrap: break-word;position: sticky; left: 0;">' + forecast.area + '</th>';
+                    forecast.weather.forEach(function(weather) {
+                        tableContents += '<td style="text-align: center;">' + weatherIcon[weather] + '</td>';
+                    });
+                    tableContents += '</tr>';
+                });
+                table.innerHTML = tableContents;
+            }
+
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        </script>
+    </body>
+</html>
