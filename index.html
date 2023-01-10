@@ -15,10 +15,15 @@
                 <br>
                 <div class="container">
                     <div class="row">
-                        <div class="col-3">
-                            <input id="date" type="text" class="form-control" placeholder="Date (Format: yyyy-MM-dd)">
-                        </div>
                         <div class="col-3 form-floating">
+                            <input id="date" type="text" class="form-control">
+                            <label for="date">Date (Format: yyyy-MM-dd)</label>
+                        </div>
+                        <!-- <div class="col-3 form-floating">
+                            <input id="time" type="text" class="form-control">
+                            <label for="time">Time (Format: hh:mm:ss)</label>
+                        </div> -->
+                        <div class="col-2 form-floating">
                             <select id="timezone" class="form-select">
                                 <option value="America/Los_Angeles">Pacific</option>
                                 <option value="America/Chicago">Central</option>
@@ -26,8 +31,12 @@
                             </select>
                             <label for="timezone">Timezone</label>
                         </div>
-                        <div class="col-3">
-                            <button type="button" class="btn btn-primary" onclick="getData();">Get Weather</button>
+                        <div class="col-1 form-check">
+                            <input id="debug" class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label" for="debug">Debug</label>
+                        </div>
+                        <div class="col-2">
+                            <button id="button_getData" type="button" class="btn btn-primary" onclick="getData();">Get Weather</button>
                         </div>
                     </div>
                 </div>
@@ -44,7 +53,7 @@
         
         <div class="container-fluid">
             <div class="row">
-                <table class="table table-primary table-striped table-bordered table-sm">
+                <table class="table table-primary table-striped table-bordered table-sm table-hover">
                     <thead style="position: sticky; top: 0;">
                         <tr>
                             <th scope="col" style="position: sticky; left: 0;">Area</th>

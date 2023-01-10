@@ -57,13 +57,17 @@ const weatherIcon = {
 async function getData() {
     let data;
     let arrayOfForecasts = new Array();
-    let formattedTodaysDate = document.getElementById('date').value;
+    let selectedDate = document.getElementById('date').value;
+    // let selectedTime = document.getElementById('time').value;
+    let selectedTime = '00:00:00';
     let selectedTimezone = document.getElementById('timezone');
     let timezone = selectedTimezone.options[selectedTimezone.selectedIndex].value;
+    let debug = document.getElementById('debug').checked;
+    document.getElementById('button_getData').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
     for (let i = 1; i < 14; i++) {
         let type = 'type' + i;
         const fetchData = await fetch(
-            'https://mabi.world/api/forecast/?from=' + formattedTodaysDate
+            'https://mabi.world/api/forecast/?from=' + selectedDate + 'T' + selectedTime
             + '&of=' + type
             + '&duration=72'
             + '&tz=' + timezone);
@@ -77,11 +81,19 @@ async function getData() {
     arrayOfForecasts.forEach(function(forecast) {
         tableContents += '<tr><th scope="row" style="word-wrap: break-word;position: sticky; left: 0;">' + forecast.area + '</th>';
         forecast.weather.forEach(function(weather) {
-            tableContents += '<td style="text-align: center;">' + weatherIcon[weather] + '</td>';
+            tableContents += '<td style="text-align: center;">' + weatherIcon[weather];
+            if (debug == true) {
+                tableContents += '<p>' + weather + '</p>';
+            }
+            tableContents += '</td>';
         });
         tableContents += '</tr>';
     });
     table.innerHTML = tableContents;
+    document.getElementById('button_getData').innerHTML = 'Get Weather';
 }
 
 document.getElementById('date').value = new Date().toISOString().split('T')[0];
+// document.getElementById('time').value = ('0' + new Date().getHours()).slice(-2)
+//                                         + ":" + ('0' + new Date().getMinutes()).slice(-2)
+//                                         + ":" + ('0' + new Date().getSeconds()).slice(-2)
