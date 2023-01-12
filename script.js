@@ -54,6 +54,60 @@ const weatherIcon = {
     '20': '<i class="bi bi-cloud-lightning-rain"></i>',
 }
 
+function createTableHeader() {
+    let militaryTime = document.getElementById('militaryTime').checked;
+    let tableHeader = document.getElementById('tableHeader');
+    var tableHeader_contents = '';
+    var hour = '';
+    var minute = '';
+    var meridiem = '';
+    var time = '';
+
+    tableHeader_contents += '<tr><th scope="col" style="position: sticky; left: 0;">Area</th>';
+    for (let i = 0; i < 24; i++) {
+        if (militaryTime == true) {
+            hour = ('0' + i).slice(-2);
+        } else if (militaryTime == false) {
+            if (i == 0) {
+                hour = '12';
+                meridiem = ' A.M.';
+            } else if (i > 0 && i < 12) {
+                hour = ('0' + i).slice(-2);
+                meridiem = ' A.M.';
+            } else if (i >= 12 && i < 24) {
+                hour = ('0' + (i - 12)).slice(-2);
+                meridiem = ' P.M.';
+            }
+        }
+        for (let j = 0; j < 60; j+=20) {
+            minute = ('0' + j).slice(-2);
+            time = hour + ':' + minute + meridiem;
+            tableHeader_contents += '<th scope="col">' + time + '</th>';
+        }
+    }
+    tableHeader_contents += '</tr>';
+    tableHeader.innerHTML = tableHeader_contents;
+}
+
+function createTableBody(arrayOfForecasts) {
+    let debug = document.getElementById('debug').checked;
+    let tableBody = document.getElementById("tableBody");
+    var tableBody_contents = '';
+
+    arrayOfForecasts.forEach(function(forecast) {
+        tableBody_contents += '<tr><th scope="row" style="word-wrap: break-word;position: sticky; left: 0;">' + forecast.area + '</th>';
+        forecast.weather.forEach(function(weather) {
+            tableBody_contents += '<td style="text-align: center;">' + weatherIcon[weather];
+            if (debug == true) {
+                tableBody_contents += '<p>' + weather + '</p>';
+            }
+            tableBody_contents += '</td>';
+        });
+        tableBody_contents += '</tr>';
+    });
+    tableBody.innerHTML = tableBody_contents;
+}
+
 async function getData() {
     let data;
     let arrayOfForecasts = new Array();
@@ -62,8 +116,12 @@ async function getData() {
     let selectedTime = '00:00:00';
     let selectedTimezone = document.getElementById('timezone');
     let timezone = selectedTimezone.options[selectedTimezone.selectedIndex].value;
-    let debug = document.getElementById('debug').checked;
-    document.getElementById('button_getData').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+    let button_getData = document.getElementById('button_getData');
+
+    button_getData.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+    createTableHeader();
+
     for (let i = 1; i < 14; i++) {
         let type = 'type' + i;
         const fetchData = await fetch(
@@ -76,21 +134,10 @@ async function getData() {
         var value = data.forecast[type];
         arrayOfForecasts.push(new Forecast(area[key], value));
     }
-    var table = document.getElementById("tableContents");
-    var tableContents = '';
-    arrayOfForecasts.forEach(function(forecast) {
-        tableContents += '<tr><th scope="row" style="word-wrap: break-word;position: sticky; left: 0;">' + forecast.area + '</th>';
-        forecast.weather.forEach(function(weather) {
-            tableContents += '<td style="text-align: center;">' + weatherIcon[weather];
-            if (debug == true) {
-                tableContents += '<p>' + weather + '</p>';
-            }
-            tableContents += '</td>';
-        });
-        tableContents += '</tr>';
-    });
-    table.innerHTML = tableContents;
-    document.getElementById('button_getData').innerHTML = 'Get Weather';
+
+    createTableBody(arrayOfForecasts);
+
+    button_getData.innerHTML = 'Get Weather';
 }
 
 document.getElementById('date').value = new Date().toISOString().split('T')[0];

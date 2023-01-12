@@ -31,9 +31,15 @@
                             </select>
                             <label for="timezone">Timezone</label>
                         </div>
-                        <div class="col-1 form-check">
-                            <input id="debug" class="form-check-input" type="checkbox" value="">
-                            <label class="form-check-label" for="debug">Debug</label>
+                        <div class="col-1">
+                            <div class="form-check">
+                                <input id="debug" class="form-check-input" type="checkbox" value="">
+                                <label class="form-check-label" for="debug">Debug</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="militaryTime" class="form-check-input" type="checkbox" value="">
+                                <label class="form-check-label" for="militaryTime">Military Time</label>
+                            </div>
                         </div>
                         <div class="col-2">
                             <button id="button_getData" type="button" class="btn btn-primary" onclick="getData();">Get Weather</button>
@@ -54,36 +60,8 @@
         <div class="container-fluid">
             <div class="row">
                 <table class="table table-primary table-striped table-bordered table-sm table-hover">
-                    <thead style="position: sticky; top: 0;">
-                        <tr>
-                            <th scope="col" style="position: sticky; left: 0;">Area</th>
-                            <th scope="col">00:00</th><th scope="col">00:20</th><th scope="col">00:40</th>
-                            <th scope="col">01:00</th><th scope="col">01:20</th><th scope="col">01:40</th>
-                            <th scope="col">02:00</th><th scope="col">02:20</th><th scope="col">02:40</th>
-                            <th scope="col">03:00</th><th scope="col">03:20</th><th scope="col">03:40</th>
-                            <th scope="col">04:00</th><th scope="col">04:20</th><th scope="col">04:40</th>
-                            <th scope="col">05:00</th><th scope="col">05:20</th><th scope="col">05:40</th>
-                            <th scope="col">06:00</th><th scope="col">06:20</th><th scope="col">06:40</th>
-                            <th scope="col">07:00</th><th scope="col">07:20</th><th scope="col">07:40</th>
-                            <th scope="col">08:00</th><th scope="col">08:20</th><th scope="col">08:40</th>
-                            <th scope="col">09:00</th><th scope="col">09:20</th><th scope="col">09:40</th>
-                            <th scope="col">10:00</th><th scope="col">10:20</th><th scope="col">10:40</th>
-                            <th scope="col">11:00</th><th scope="col">11:20</th><th scope="col">11:40</th>
-                            <th scope="col">12:00</th><th scope="col">12:20</th><th scope="col">12:40</th>
-                            <th scope="col">13:00</th><th scope="col">13:20</th><th scope="col">13:40</th>
-                            <th scope="col">14:00</th><th scope="col">14:20</th><th scope="col">14:40</th>
-                            <th scope="col">15:00</th><th scope="col">15:20</th><th scope="col">15:40</th>
-                            <th scope="col">16:00</th><th scope="col">16:20</th><th scope="col">16:40</th>
-                            <th scope="col">17:00</th><th scope="col">17:20</th><th scope="col">17:40</th>
-                            <th scope="col">18:00</th><th scope="col">18:20</th><th scope="col">18:40</th>
-                            <th scope="col">19:00</th><th scope="col">19:20</th><th scope="col">19:40</th>
-                            <th scope="col">20:00</th><th scope="col">20:20</th><th scope="col">20:40</th>
-                            <th scope="col">21:00</th><th scope="col">21:20</th><th scope="col">21:40</th>
-                            <th scope="col">22:00</th><th scope="col">22:20</th><th scope="col">22:40</th>
-                            <th scope="col">23:00</th><th scope="col">23:20</th><th scope="col">23:40</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableContents" class="table-group-divider align-middle"></tbody>
+                    <thead id="tableHeader" style="position: sticky; top: 0;"></thead>
+                    <tbody id="tableBody" class="table-group-divider align-middle"></tbody>
                 </table>
             </div>
         </div>
